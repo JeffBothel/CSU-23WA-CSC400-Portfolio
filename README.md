@@ -257,7 +257,7 @@ public class Order
         return "Order: " + this.number + "; Last Name: " + this.lastName + "; Cost: " + this.cost + "\n"
 ```
 
-### ```OrderQueue``` Program Class
+### ```OrdersQueue``` Program Class
 ```
 public class OrderQueue
     private orders
