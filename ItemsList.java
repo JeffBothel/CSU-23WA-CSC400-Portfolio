@@ -52,6 +52,13 @@ public class ItemsList {
         items.push(new Item(inName, inNumber, inCost, inDescription));
     }
 
+    // Function that imports an array of items to the listing
+    public void addItems(Item[] inItems) {
+        for (int i = 0; i < inItems.length; i++) {
+            addItem(inItems[i]);
+        }
+    }
+
     // Function that removes an item from the list
     public void removeItem(Item inItem) {
         items.remove(inItem);
@@ -137,6 +144,15 @@ public class ItemsList {
         return -1;
     }
 
+    // Function that gets the items from the list in an sorted array
+    public Item[] getItemsSorted() {
+        Item[] outItems = new Item[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            outItems[i] = items.get(i);
+        }
+        return outItems;
+    }
+
     // Send the list item contents to string
     public String toString() {
         String outString = "";
@@ -144,5 +160,71 @@ public class ItemsList {
             outString += items.get(i).toString() + "\n";
         }
         return outString;
+    }
+
+    // Creating an overloaded method for the sortItems to allow blank arguments list that set defaults
+    public void sortItems() {
+        sortItems(this.items, false);
+    }
+
+
+    // Creating an overloaded method for the sortItems to allow a boolean argument that sets the sort type
+    public void sortItems(Boolean byName) {
+        sortItems(this.items, byName);
+    }
+
+    // Sorting of the items that are in the list
+    private void sortItems(Stack<Item> inItems, Boolean byName) {
+        // Recursive operation needed to sort the items list
+        if(items.size() > 3) {
+            Stack<Item> itemsStackLeft = new Stack<Item>();
+            Stack<Item> itemsStackRight = new Stack<Item>();
+
+            // Separating the items into two stacks
+            while(inItems.size() > (items.size() / 2)) {
+                itemsStackLeft.push(items.pop());
+            }
+            while(inItems.size() > 0) {
+                itemsStackRight.push(items.pop());
+            }
+
+            // Calling the two stacks recursively
+            sortItems(itemsStackLeft, byName);
+            sortItems(itemsStackRight, byName);
+
+            // Merging the two stacks back together
+            while(itemsStackLeft.size() > 0) {
+                inItems.push(itemsStackLeft.pop());
+            }
+            while(itemsStackRight.size() > 0) {
+                inItems.push(itemsStackRight.pop());
+            }
+        }
+
+        // Sorting the items by name
+        if(byName) {
+            for(int i = 0; i < inItems.size(); i++) {
+                for(int j = 0; j < inItems.size(); j++) {
+                    if(inItems.get(i).getName().compareTo(inItems.get(j).getName()) < 0) {
+                        Item tempItem = inItems.get(i);
+                        inItems.set(i, inItems.get(j));
+                        inItems.set(j, tempItem);
+                    }
+                }
+            }
+        }
+
+        // Sorting the items by number
+        else {
+            for(int i = 0; i < inItems.size(); i++) {
+                for(int j = 0; j < inItems.size(); j++) {
+                    if(inItems.get(i).getNumber() < inItems.get(j).getNumber()) {
+                        Item tempItem = inItems.get(i);
+                        inItems.set(i, inItems.get(j));
+                        inItems.set(j, tempItem);
+                    }
+                }
+            }
+        }
     }
 }
